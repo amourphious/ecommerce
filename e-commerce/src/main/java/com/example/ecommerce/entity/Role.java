@@ -1,10 +1,15 @@
 package com.example.ecommerce.entity;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
+
 import javax.persistence.*;
 import java.util.List;
 
 @Entity
 @Table(name = "role")
+@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class,property = "roleId")
 public class Role {
 
     @Id

@@ -1,5 +1,10 @@
 package com.example.ecommerce.entity;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
+
 import javax.persistence.*;
 import java.util.Date;
 import java.util.HashSet;
@@ -27,11 +32,13 @@ public class Invoice {
     @Embedded
     private InvoiceAddress invoiceAddress;
 
-    @OneToMany(mappedBy = "invoice",cascade = CascadeType.ALL,fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "invoice",cascade = CascadeType.ALL,fetch = FetchType.LAZY)
+    @JsonManagedReference(value = "invoiceOrderProduct")
     Set<OrderProduct> orderProductSet;
 
     @ManyToOne()
     @JoinColumn(name = "customer_id")
+    @JsonBackReference(value = "customerInvoice")
     private Customer customer;
 
     public Invoice(){

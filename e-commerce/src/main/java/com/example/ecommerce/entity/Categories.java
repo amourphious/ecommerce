@@ -1,5 +1,10 @@
 package com.example.ecommerce.entity;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
+
 import javax.persistence.*;
 import java.util.HashSet;
 import java.util.Set;
@@ -18,15 +23,18 @@ public class Categories {
 
 
 
-    @OneToMany(cascade = CascadeType.ALL,mappedBy = "parentCategory")
+    @OneToMany(cascade = CascadeType.ALL,mappedBy = "parentCategory",fetch = FetchType.LAZY)
+    @JsonManagedReference(value = "parentChildRelation")
     private Set<Categories> childCategories; // always add parent category to child category
 
 
     @ManyToOne(optional = true)
     @JoinColumn(name = "parent_category_id")
+    @JsonBackReference(value = "parentChildRelation")
     private Categories parentCategory;
 
-    @OneToMany(mappedBy = "categories",cascade =CascadeType.ALL,fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "categories",cascade =CascadeType.ALL,fetch = FetchType.LAZY)
+    @JsonManagedReference(value = "productCategories")
     private Set<Product> productSet;
 
 

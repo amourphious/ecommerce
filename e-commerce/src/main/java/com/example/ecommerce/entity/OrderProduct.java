@@ -1,9 +1,15 @@
 package com.example.ecommerce.entity;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
+
 import javax.persistence.*;
 
 @Entity
 @Table(name = "order_product")
+@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class,property = "orderProductId")
 public class OrderProduct {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE,generator = "identity_generator")
@@ -17,10 +23,12 @@ public class OrderProduct {
 
     @ManyToOne
     @JoinColumn(name = "invoice_id")
+    @JsonBackReference(value = "invoiceOrderProduct")
     Invoice invoice;
 
     @ManyToOne
     @JoinColumn(name = "product_variation_id")
+    @JsonBackReference(value = "productVariationOrder")
     ProductVariation productVariation;
 
     @OneToOne(mappedBy = "orderProduct",cascade = CascadeType.ALL)

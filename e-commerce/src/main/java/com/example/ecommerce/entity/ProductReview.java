@@ -1,5 +1,9 @@
 package com.example.ecommerce.entity;
 
+
+
+import com.fasterxml.jackson.annotation.JsonBackReference;
+
 import javax.persistence.*;
 
 @Entity
@@ -15,10 +19,12 @@ public class ProductReview {
 
     @ManyToOne
     @JoinColumn(name = "product_id")
+    @JsonBackReference(value = "productReview")
     private Product product;
 
     @ManyToOne
     @JoinColumn(name = "customer_id")
+    @JsonBackReference(value = "customerReview")
     private Customer customer;
 
     // parameterized constructor

@@ -1,5 +1,8 @@
 package com.example.ecommerce.entity;
 
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
+
 import javax.persistence.*;
 import java.util.Set;
 
@@ -18,7 +21,7 @@ public class Cart {
     @Column(name = "is_wishlist_item")
     private boolean isWishlistItem;
 
-    @OneToOne(cascade = CascadeType.ALL,fetch = FetchType.EAGER)
+    @OneToOne(cascade = CascadeType.ALL,fetch = FetchType.LAZY)
     @JoinColumn(name = "customer_id",referencedColumnName = "customer_id")
     Customer customer;
 

@@ -1,10 +1,16 @@
 package com.example.ecommerce.entity;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
+
 import javax.persistence.*;
 
 @Embeddable
 @Entity
 @Table(name="address")
+@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class,property = "addressId")
 public class Address {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE,generator = "identity_generator")
@@ -28,8 +34,10 @@ public class Address {
 
     private String label;
 
+
     @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "user_id")
+    @JsonBackReference(value = "userAddress")
     User user;
 
     public Address(){
@@ -43,6 +51,34 @@ public class Address {
         this.state = state;
         this.country = country;
         this.zipCode = zipCode;
+        this.label = label;
+    }
+
+    public void setAddressId(Long addressId) {
+        this.addressId = addressId;
+    }
+
+    public void setStreetAddress(String streetAddress) {
+        this.streetAddress = streetAddress;
+    }
+
+    public void setCity(String city) {
+        this.city = city;
+    }
+
+    public void setState(String state) {
+        this.state = state;
+    }
+
+    public void setCountry(String country) {
+        this.country = country;
+    }
+
+    public void setZipCode(Integer zipCode) {
+        this.zipCode = zipCode;
+    }
+
+    public void setLabel(String label) {
         this.label = label;
     }
 

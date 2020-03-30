@@ -1,5 +1,9 @@
 package com.example.ecommerce.entity;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import com.vladmihalcea.hibernate.type.json.JsonBinaryType;
 import com.vladmihalcea.hibernate.type.json.JsonStringType;
 import org.hibernate.annotations.Type;
@@ -16,6 +20,7 @@ import java.util.Set;
 })
 @Entity
 @Table(name = "product_variation")
+@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class,property = "productVariationId")
 public class ProductVariation {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "identity_generator")
@@ -36,12 +41,15 @@ public class ProductVariation {
 
     @ManyToOne
     @JoinColumn(name = "product_id")
+    @JsonBackReference(value = "productVariation")
     Product product;
 
-    @OneToMany(mappedBy = "productVariation")
+    @OneToMany(mappedBy = "productVariation",fetch = FetchType.LAZY)
+    @JsonManagedReference(value = "productVariationOrder")
     Collection<OrderProduct> orderProduct;
 
     @ManyToMany(mappedBy = "productVariationSet")
+    @JsonBackReference(value = "productVariationCart")
     private Set<Cart> cartSet;
 
 

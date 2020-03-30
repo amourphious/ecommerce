@@ -1,5 +1,7 @@
 package com.example.ecommerce.entity;
 
+import com.fasterxml.jackson.annotation.*;
+
 import javax.persistence.*;
 import java.util.HashSet;
 import java.util.List;
@@ -7,6 +9,7 @@ import java.util.Set;
 
 @Entity
 @Table(name = "product")
+@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class,property = "productId")
 public class Product {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE,generator = "identity_generator")
@@ -31,15 +34,18 @@ public class Product {
 
     @ManyToOne
     @JoinColumn(name = "category_id")
+    @JsonBackReference(value = "productCategories")
     private Categories categories;
 
-    @ManyToMany(mappedBy = "productList")
+    @ManyToMany(mappedBy = "productList",fetch = FetchType.LAZY)
     Set<Seller> sellerList;
 
-    @OneToMany(mappedBy = "product",cascade = CascadeType.ALL,fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "product",cascade = CascadeType.ALL,fetch = FetchType.LAZY)
+    @JsonManagedReference(value = "productVariation")
     private Set<ProductVariation> productVariationSet;
 
-    @OneToMany(mappedBy = "product",cascade = CascadeType.ALL,fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "product",cascade = CascadeType.ALL,fetch = FetchType.LAZY)
+    @JsonManagedReference(value = "productReview")
     private List<ProductReview> productReviewList;
 
     // product getter or setter

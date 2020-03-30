@@ -1,14 +1,21 @@
 package com.example.ecommerce.entity;
 
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
+
 import javax.persistence.*;
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import javax.validation.constraints.Email;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Pattern;
+import java.sql.Timestamp;
+import java.util.*;
 
 @Entity
 @Table(name = "user")
 @Inheritance(strategy = InheritanceType.JOINED)
+@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class,property = "userId")
 public abstract class User {
 
     @Id
@@ -17,15 +24,20 @@ public abstract class User {
     @SequenceGenerator(name = "identity_generator",sequenceName = "identity_table",allocationSize = 1)
     private Long userId;
 
-    @Column(name = "username",unique = true)
+    @NotNull(message="username is required and should be unique")
+    @Column(unique = true)
     private String username;
 
-    @Column(name = "password")
+    @NotNull(message = "password is mandatory ")
+    @Pattern(regexp="((?=.*\\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[@#$%]).{8,64})",message="Password must be 8 characters long and should contain uppercase,lowercase,digit,and special character")
     private String password;
 
-    @Column(name = "email",unique = true)
+    @NotNull(message = "email is required and should be unique")
+    @Column(unique = true)
+    @Email(message = "enter a valid email")
     private String email;
 
+    @NotNull(message = "first name is required")
     @Column(name = "first_name")
     private String firstName;
 
@@ -41,20 +53,16 @@ public abstract class User {
     @Column(name = "is_active")
     private boolean isActive;
 
-    @ManyToMany(cascade = CascadeType.ALL)
+
+    @ManyToMany(cascade = CascadeType.ALL,fetch = FetchType.LAZY)
     @JoinTable(name = "user_role_list",
             joinColumns = @JoinColumn(name = "u_id",referencedColumnName = "user_id"),
             inverseJoinColumns = @JoinColumn(name = "r_id",referencedColumnName = "role_id"))
     private List<Role> rolesList=new ArrayList<>();
 
-    @OneToMany(mappedBy = "user",cascade = CascadeType.ALL,fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "user",cascade = CascadeType.ALL,fetch = FetchType.LAZY)
+    @JsonManagedReference(value = "userAddress")
     Set<Address> addressSet;
-
-//    @OneToOne(mappedBy = "user",cascade = CascadeType.ALL)
-//    Customer customer;
-//
-//    @OneToOne(mappedBy = "user",cascade = CascadeType.ALL)
-//    Seller seller;
 
     public User(){
 
@@ -91,22 +99,6 @@ public abstract class User {
     public void setPassword(String password) {
         this.password = password;
     }
-
-//    public Customer getCustomer() {
-//        return customer;
-//    }
-//
-//    public void setCustomer(Customer customer) {
-//        this.customer = customer;
-//    }
-//
-//    public Seller getSeller() {
-//        return seller;
-//    }
-//
-//    public void setSeller(Seller seller) {
-//        this.seller = seller;
-//    }
 
     public String getEmail() {
         return email;
@@ -163,16 +155,6 @@ public abstract class User {
     public void setAddressSet(Set<Address> addressSet) {
         this.addressSet = addressSet;
     }
-
-//    public void createCustomer(Customer cobj){
-//       this.setCustomer(cobj);
-//       cobj.setUser(this);
-//    }
-//
-//    public void createSeller(Seller sobj){
-//        this.setSeller(sobj);
-//        sobj.setUser(this);
-//    }
 
     public void addAddress(Address address){
         if(addressSet==null){

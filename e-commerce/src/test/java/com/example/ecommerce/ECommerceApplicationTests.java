@@ -9,6 +9,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.test.annotation.Rollback;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.*;
 
@@ -83,7 +85,7 @@ class ECommerceApplicationTests {
         seller.setActive(true);
         seller.setRolesList(Arrays.asList(r1, r3)); // many-to-many don,t require added from role side
         seller.setGstNumber("frx-99087-y");
-        seller.setComapnyName("crossing infinity");
+        seller.setCompanyName("crossing infinity");
         seller.setContactNumber("4444444444");
         sellerRepository.save(seller);
     }
@@ -325,5 +327,28 @@ class ECommerceApplicationTests {
 
         customer.createCart(cart);
         customerRepository.save(customer);
+    }
+
+    @Test
+    public void printEmail(){
+        List<Seller> sellerList=sellerRepository.fetchAllSeller();
+        sellerList.forEach(e-> System.out.println(e.getEmail()));
+    }
+
+    @Test
+    public void getCustomer(){
+        Customer customer=customerRepository.findByActivationToken("f3ba76cd-0464-427d-9ffe-3de9330dda57");
+        System.out.println(customer.getEmail());
+        System.out.println(customer.getFirstName());
+    }
+
+    @Transactional
+    @Test
+    @Rollback(false)
+    public  void deleteUser(){
+        Seller seller=sellerRepository.findByUsername("hari-bol");
+        if(seller!=null){
+            sellerRepository.delete(seller);
+        }
     }
 }

@@ -1,6 +1,14 @@
 package com.example.ecommerce.entity;
 
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
+
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
+import java.sql.Timestamp;
 import java.util.*;
 
 @Entity
@@ -8,24 +16,24 @@ import java.util.*;
 @PrimaryKeyJoinColumn(name = "customer_id",referencedColumnName ="user_id" )
 public class Customer extends User{
 
-//    @Id
-//    @Column(name = "customer_id")
-//    @GeneratedValue(strategy = GenerationType.SEQUENCE,generator = "identity_generator")
-//    @SequenceGenerator(name = "identity_generator",sequenceName = "identity_table",allocationSize = 1)
-//    private Long customerId;
-
-    @Column(name = "contact_number",unique = true)
+    @Column(name = "contact_number")
     private String contactNumber;
 
-//    @OneToOne
-//    @MapsId
-//    @JoinColumn(name = "id")
-//    private User user;
+    @JsonIgnore
+    @Column(name = "activation_token")
+    private String activationToken;
+
+    @JsonIgnore
+    @Column(name = "token_expiry_date")
+    private Date expiryDate;
+
 
     @OneToMany(mappedBy = "customer",cascade = CascadeType.ALL,fetch = FetchType.LAZY)
+    @JsonManagedReference(value = "customerReview")
     private List<ProductReview> productReviewList;
 
-    @OneToMany(mappedBy = "customer",cascade = CascadeType.ALL,fetch = FetchType.EAGER  )
+    @OneToMany(mappedBy = "customer",cascade = CascadeType.ALL,fetch = FetchType.LAZY)
+    @JsonManagedReference(value = "customerInvoice")
     private Collection<Invoice> invoiceSet;
 
     @OneToOne(mappedBy = "customer",cascade = CascadeType.ALL)
@@ -34,22 +42,6 @@ public class Customer extends User{
     // getter and setter
     public Customer(){
     }
-
-//    public User getUser() {
-//        return user;
-//    }
-//
-//    public void setUser(User user) {
-//        this.user = user;
-//    }
-
-//       public Long getCustomerId() {
-//        return customerId;
-//    }
-//
-//    public void setCustomerId(Long customerId) {
-//        this.customerId = customerId;
-//    }
 
     public String getContactNumber() {
         return contactNumber;
@@ -114,5 +106,24 @@ public class Customer extends User{
         cart.setCustomer(this);
     }
 
+    public String getActivationToken() {
+        return activationToken;
+    }
+
+    public void setActivationToken(String activationToken) {
+        this.activationToken = activationToken;
+    }
+
+    public Date getExpiryDate() {
+        return expiryDate;
+    }
+
+    public void setExpiryDate(int expiryTimeInMinutes)
+    {
+        Calendar cal = Calendar.getInstance();
+        cal.setTime(new Timestamp(cal.getTime().getTime()));
+        cal.add(Calendar.MINUTE, expiryTimeInMinutes);
+        this.expiryDate = new Date(cal.getTime().getTime());;
+    }
 
 }
