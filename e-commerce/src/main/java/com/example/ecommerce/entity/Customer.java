@@ -23,9 +23,6 @@ public class Customer extends User{
     @Column(name = "activation_token")
     private String activationToken;
 
-    @JsonIgnore
-    @Column(name = "token_expiry_date")
-    private Date expiryDate;
 
 
     @OneToMany(mappedBy = "customer",cascade = CascadeType.ALL,fetch = FetchType.LAZY)
@@ -114,16 +111,6 @@ public class Customer extends User{
         this.activationToken = activationToken;
     }
 
-    public Date getExpiryDate() {
-        return expiryDate;
-    }
 
-    public void setExpiryDate(int expiryTimeInMinutes)
-    {
-        Calendar cal = Calendar.getInstance();
-        cal.setTime(new Timestamp(cal.getTime().getTime()));
-        cal.add(Calendar.MINUTE, expiryTimeInMinutes);
-        this.expiryDate = new Date(cal.getTime().getTime());;
-    }
 
 }

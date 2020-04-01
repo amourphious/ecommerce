@@ -45,7 +45,7 @@ public class ExceptionHandling extends ResponseEntityExceptionHandler {
 
     @ExceptionHandler(NotFoundException.class)
     public final ResponseEntity<Object> handleUserNotFoundExceptions(NotFoundException ex, WebRequest request) {
-        ApiError apiError = new ApiError(new Date(), "User Not Found..",
+        ApiError apiError = new ApiError(new Date(), ex.getMessage(),
                 request.getDescription(false));
         return new ResponseEntity(apiError, HttpStatus.NOT_FOUND);
     }

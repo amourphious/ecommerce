@@ -9,31 +9,21 @@ import java.util.List;
 
 public class AppUser implements UserDetails {
 
-    private String first_name;
+    private String username;
     private String password;
-    List<GrantAuthorityImpl> grantAuthorities;
+    List<GrantedAuthority> grantAuthorities;
 
-    public AppUser(String first_name, String password, List<GrantAuthorityImpl> grantAuthorities) {
-        this.first_name = first_name;
+    public AppUser(String username, String password, List<GrantedAuthority> grantAuthorities) {
+        this.username = username;
         this.password = password;
         this.grantAuthorities = grantAuthorities;
     }
 
-    /*public Collection<? extends GrantedAuthority> getAuthorities(Collection<Role> roles) {
-        List<GrantedAuthority> authorities
-                = new ArrayList<>();
-        for (Role role: roles) {
-            authorities.add(new SimpleGrantedAuthority(role.getAuthority()));
-        }
-
-        return authorities;
-    }*/
-
-
     @Override
-    public Collection<? extends GrantedAuthority> getAuthorities() {
-        List<GrantedAuthority> listAuthorities = new ArrayList<GrantedAuthority>();
-        listAuthorities.addAll(grantAuthorities);
+    public Collection<? extends GrantedAuthority> getAuthorities(){
+        System.out.println("In app user");
+        System.out.println((grantAuthorities));
+        System.out.println("Out of app user");
        return grantAuthorities;
     }
 
@@ -44,7 +34,7 @@ public class AppUser implements UserDetails {
 
     @Override
     public String getUsername() {
-        return first_name;
+        return username;
     }
 
     @Override

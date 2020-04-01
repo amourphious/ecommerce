@@ -67,6 +67,15 @@ public class ResourceServerConfiguration extends ResourceServerConfigurerAdapter
                 .antMatchers("/activate/customer/{token}").permitAll()
                 .antMatchers("/customer/{email}/resendActivationLink/").permitAll()
 
+                .antMatchers("/admin-panel/customer-list").permitAll()
+                .antMatchers("/admin-panel/seller-list").permitAll()
+                .antMatchers("/admin-panel/activate/customer").permitAll()
+                .antMatchers("/admin-panel/deactivate/customer").permitAll()
+                .antMatchers("/admin-panel/activate/seller").permitAll()
+                .antMatchers("/admin-panel/deactivate/seller").permitAll()
+                .antMatchers("/generate-password").permitAll()
+                .antMatchers().permitAll()
+
                 .anyRequest().authenticated()
                 .and()
                 .sessionManagement()

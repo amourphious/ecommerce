@@ -45,7 +45,7 @@ public class RegistrationController {
         URI location= UriComponentsBuilder.fromPath("http://localhost:8080/seller")
                 .path("/{username}")
                 .buildAndExpand(registeredSeller.getUsername())
-                .toUri();
+                   .toUri();
         return new ResponseEntity("Customer Account Registered",HttpStatus.CREATED);
     }
 

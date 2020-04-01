@@ -26,13 +26,14 @@ public class AuthorizationServerConfiguration extends AuthorizationServerConfigu
     PasswordEncoder passwordEncoder;
 
     @Autowired
-    DataSource dataSource;
-
-    @Autowired
     AuthenticationManager authenticationManager;
 
     @Autowired
     UserDetailsService userDetailsService;
+
+    @Autowired
+    DataSource dataSource;
+
 
     public AuthorizationServerConfiguration() {
         super();

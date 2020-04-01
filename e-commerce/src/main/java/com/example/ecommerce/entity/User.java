@@ -47,14 +47,22 @@ public abstract class User {
     @Column(name = "last_name")
     private String lastName;
 
+    @Column(name = "password_reset_token")
+    private String resetToken;
+
+    @JsonIgnore
+    @Column(name = "token_expiry_date")
+    private Date expiryDate;
+
     @Column(name = "is_deleted")
     private boolean isDeleted;
+
 
     @Column(name = "is_active")
     private boolean isActive;
 
 
-    @ManyToMany(cascade = CascadeType.ALL,fetch = FetchType.LAZY)
+    @ManyToMany(cascade = CascadeType.ALL,fetch = FetchType.EAGER)
     @JoinTable(name = "user_role_list",
             joinColumns = @JoinColumn(name = "u_id",referencedColumnName = "user_id"),
             inverseJoinColumns = @JoinColumn(name = "r_id",referencedColumnName = "role_id"))
@@ -164,6 +172,26 @@ public abstract class User {
         addressSet.add(address);
         address.setUser(this);
         this.setAddressSet(addressSet);
+    }
+
+    public Date getExpiryDate() {
+        return expiryDate;
+    }
+
+    public void setExpiryDate(int expiryTimeInMinutes)
+    {
+        Calendar cal = Calendar.getInstance();
+        cal.setTime(new Timestamp(cal.getTime().getTime()));
+        cal.add(Calendar.MINUTE, expiryTimeInMinutes);
+        this.expiryDate = new Date(cal.getTime().getTime());;
+    }
+
+    public String getResetToken() {
+        return resetToken;
+    }
+
+    public void setResetToken(String resetToken) {
+        this.resetToken = resetToken;
     }
 
     @Override
