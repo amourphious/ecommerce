@@ -1,11 +1,10 @@
 package com.example.ecommerce.controller;
 
 
-import com.example.ecommerce.entity.Seller;
-import com.example.ecommerce.exception.NotFoundException;
+import com.example.ecommerce.dto.SellerResponseDto;
 import com.example.ecommerce.services.SellerService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.repository.query.Param;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -18,24 +17,22 @@ public class SellerController {
     SellerService sellerService;
 
     @GetMapping(path = "/seller/list")
-    public List<Seller> getAllSellers(){
-        List<Seller> sellerList=sellerService.getAllSellers();
-        return sellerList;
+    public List<SellerResponseDto> getAllSellers(){
+        return sellerService.getAllSellers();
     }
 
-    @GetMapping(path = "/seller/{username}")
-    public Seller getSeller(@PathVariable String username){
-        return sellerService.getSeller(username);
+    @GetMapping(path = "/seller/{id}")
+    public SellerResponseDto getSeller(@PathVariable Long id){
+        return sellerService.getSeller(id);
     }
 
-    @DeleteMapping(path = "/seller/delete/{username}")
-    public ResponseEntity deleteSeller(@PathVariable String username){
-        Seller seller=sellerService.getSeller(username);
-        if(seller==null){
-            throw new NotFoundException(username + "seller not found");
-        }
-            sellerService.deleteSeller(seller);
-        return ResponseEntity.noContent().build();
+    @DeleteMapping(path = "/seller/delete/{id}")
+    public ResponseEntity<String> deleteSeller(@PathVariable Long id){
+
+        SellerResponseDto sellerResponseDto =sellerService.getSeller(id);
+        System.out.println(sellerResponseDto.getFirstName());
+        sellerService.deleteSeller(sellerResponseDto.getSellerId());
+        return  new ResponseEntity<>("seller has been deleted",HttpStatus.NO_CONTENT);
     }
 
 }

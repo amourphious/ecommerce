@@ -48,6 +48,7 @@ public class EmailService {
         simpleMailMessage.setSubject("password regeneration link");
         simpleMailMessage.setText("use the token to genrate ne password\n"+
                 token);
+        javaMailSender.send(simpleMailMessage);
     }
 
 }

@@ -12,6 +12,8 @@ public interface UserRepository extends CrudRepository<User,Long> {
 
     User findByUsername(String username);
 
+    User findByResetToken(String resetToken);
+
     @Query("SELECT email from User")
     List<String> fetchAllEmail();
 }

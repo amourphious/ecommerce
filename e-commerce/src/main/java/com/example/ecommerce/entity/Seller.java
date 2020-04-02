@@ -12,17 +12,15 @@ import java.util.Set;
 public class Seller extends User {
 
 
-    @NotNull(message = "gst number is required ")
     @Column(name = "gst_number",unique = true)
     private String gstNumber;
 
-    @NotNull(message = "company name is required and should be unique")
+
     @Column(name = "company_name",unique = true)
     private String companyName;
 
-    @Pattern(regexp = "((\\+*)((0[ -]+)*|(91 )*)(\\d{12}+|\\d{10}+))|\\d{5}([- ]*)\\d{6}",message = "enter a valid phone number")
-    @NotNull(message = "contact number required")
-    @Column(name = "contact_number")
+
+    @Column(name = "contact_number",unique = true)
     private String contactNumber;
 
 

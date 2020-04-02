@@ -74,6 +74,7 @@ public class ResourceServerConfiguration extends ResourceServerConfigurerAdapter
                 .antMatchers("/admin-panel/activate/seller").permitAll()
                 .antMatchers("/admin-panel/deactivate/seller").permitAll()
                 .antMatchers("/generate-password").permitAll()
+                .antMatchers("/reset-password").permitAll()
                 .antMatchers().permitAll()
 
                 .anyRequest().authenticated()

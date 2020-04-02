@@ -1,5 +1,6 @@
 package com.example.ecommerce.services;
 
+import com.example.ecommerce.dto.SellerRegisterDTO;
 import com.example.ecommerce.entity.Customer;
 import com.example.ecommerce.entity.Role;
 import com.example.ecommerce.entity.Seller;
@@ -7,6 +8,7 @@ import com.example.ecommerce.entity.User;
 import com.example.ecommerce.repository.CustomerRepository;
 import com.example.ecommerce.repository.SellerRepository;
 import com.example.ecommerce.repository.UserRepository;
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -27,16 +29,23 @@ public class RegistrationService {
     @Autowired
     CustomerRepository customerRepository;
 
+    @Autowired
+    EmailService emailService;
+
     PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
 
     // register seller in deactivate state
-    public Seller registerSeller(Seller seller){
+    public boolean registerSeller(SellerRegisterDTO sellerRegisterDTO){
+        ModelMapper modelMapper=new ModelMapper();
+        Seller seller=modelMapper.map(sellerRegisterDTO,Seller.class);
         String encodedPassword=passwordEncoder.encode(seller.getPassword());
         seller.setPassword(encodedPassword);
         seller.setRolesList(Arrays.asList(new Role("SELLER_ROLE")));
         seller.setActive(false);
         sellerRepository.save(seller);
-        return seller;
+        String toEmail=seller.getEmail();
+        emailService.emailToSeller(toEmail);
+        return true;
     }
 
     // register seller in deactivate state

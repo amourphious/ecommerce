@@ -22,8 +22,14 @@ public class PasswordController {
         return  new ResponseEntity("not able to generate password",HttpStatus.BAD_REQUEST);
     }
 
-//    @PutMapping
-//    public ResponseEntity<String> resetPassword(@RequestBody PasswordDTO passwordDTO){
-//
-//    }
+    @PutMapping(path = "/reset-password")
+    public ResponseEntity<String> resetPassword(@RequestBody PasswordDTO passwordDTO){
+        if(passwordService.confirmPassword(passwordDTO)){
+            return new ResponseEntity<>("the entered password do not match confirm password",HttpStatus.NOT_ACCEPTABLE);
+        }
+        if(passwordService.resetPassword(passwordDTO)){
+            return new ResponseEntity<>("password has been update",HttpStatus.OK);
+        }
+        return new ResponseEntity<>("token expired new token sent via mail",HttpStatus.BAD_REQUEST);
+    }
 }

@@ -1,9 +1,9 @@
 package com.example.ecommerce.controller;
 
-import com.example.ecommerce.entity.Customer;
-import com.example.ecommerce.exception.NotFoundException;
+import com.example.ecommerce.dto.CustomerResponseDTO;
 import com.example.ecommerce.services.CustomerService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -19,26 +19,19 @@ public class CustomerController {
     CustomerService customerService;
 
     @GetMapping(path ="/customer/list")
-    public List<Customer> getAllCustomers(){
+    public List<CustomerResponseDTO> getAllCustomers(){
         return customerService.getAllCustomer();
     }
 
-    @GetMapping(path ="/customer/{username}" )
-    public Customer getCustomer(@PathVariable String username){
-        Customer customer=customerService.getCustomer(username);
-        if(customer==null){
-            throw new NotFoundException("customer with "+username+" not found");
-        }
-        return customer;
+    @GetMapping(path ="/customer/{id}" )
+    public CustomerResponseDTO getCustomer(@PathVariable Long id){
+        return customerService.getCustomer(id);
     }
 
-    @DeleteMapping(path ="/customer/delete/{username}")
-    public ResponseEntity deleteCustomer(@PathVariable  String username){
-       Customer customer=customerService.getCustomer(username);
-        if(customer==null){
-            throw new NotFoundException("customer with "+username+" not found");
-        }
-        customerService.deleteCustomer(customer);
-       return  ResponseEntity.noContent().build();
+    @DeleteMapping(path ="/customer/delete/{id}")
+    public ResponseEntity<String> deleteCustomer(@PathVariable  Long id){
+       CustomerResponseDTO customerResponseDTO =customerService.getCustomer(id);
+        customerService.deleteCustomer(id);
+       return new ResponseEntity("the customer has been deleted", HttpStatus.NO_CONTENT);
     }
 }

@@ -1,10 +1,14 @@
 package com.example.ecommerce.controller;
 
+import com.example.ecommerce.dto.CustomerResponseDTO;
+import com.example.ecommerce.dto.SellerRegisterDTO;
+import com.example.ecommerce.dto.SellerResponseDto;
 import com.example.ecommerce.entity.Customer;
 import com.example.ecommerce.entity.Seller;
 import com.example.ecommerce.exception.NotFoundException;
 import com.example.ecommerce.services.AdminService;
 import com.example.ecommerce.services.EmailService;
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -17,28 +21,25 @@ import java.util.List;
 
 @RestController
 public class AdminController {
+
     @Autowired
-    AdminService adminService;
+    ModelMapper modelMapper;
 
     @Autowired
     EmailService emailService;
 
+    @Autowired
+    AdminService adminService;
+
+
     @GetMapping(path = "/admin-panel/customer-list")
-    public List<Customer> getAllCustomer(){
-        List<Customer> customerList=adminService.getAllCustomer();
-        if(customerList==null){
-            throw new NotFoundException("there are no customer registered");
-        }
-        return customerList;
+    public List<CustomerResponseDTO> getAllCustomer(){
+        return adminService.getAllCustomer();
     }
 
     @GetMapping(path = "/admin-panel/seller-list")
-    public List<Seller> getAllSeller(){
-        List<Seller> sellerList=adminService.getAllSellers();
-        if(sellerList==null){
-            throw new NotFoundException("there are no seller registered");
-        }
-        return sellerList;
+    public List<SellerResponseDto> getAllSeller(){
+        return adminService.getAllSellers();
     }
 
     @PutMapping(path = "/admin-panel/activate/customer")

@@ -1,12 +1,16 @@
 package com.example.ecommerce.services;
 
+import com.example.ecommerce.dto.CustomerResponseDTO;
 import com.example.ecommerce.entity.Customer;
-import com.example.ecommerce.entity.Seller;
+import com.example.ecommerce.exception.NotFoundException;
 import com.example.ecommerce.repository.CustomerRepository;
+import org.modelmapper.ModelMapper;
+import org.modelmapper.TypeToken;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.lang.reflect.Type;
 import java.util.List;
 
 @Service
@@ -14,22 +18,27 @@ public class CustomerService {
     @Autowired
     CustomerRepository customerRepository;
 
-    public List<Customer> getAllCustomer(){
+    public List<CustomerResponseDTO> getAllCustomer(){
         List<Customer> customerList=customerRepository.fetchAllCustomer();
-        return customerList;
+        ModelMapper modelMapper=new ModelMapper();
+        Type listType=new TypeToken<List<CustomerResponseDTO>>() {}.getType();
+        List<CustomerResponseDTO> customerResponseDTOList =modelMapper.map(customerList,listType);
+        return customerResponseDTOList;
     }
 
-    public Customer getCustomer(String username){
-        Customer customer=customerRepository.findByUsername(username);
+    public CustomerResponseDTO getCustomer(Long id){
+        Customer customer=customerRepository.findById(id).get();
         if(customer==null){
-            return null;
+            throw  new NotFoundException("user with "+id+"not found");
         }
-        return  customer;
+        ModelMapper modelMapper=new ModelMapper();
+        CustomerResponseDTO customerResponseDTO =modelMapper.map(customer, CustomerResponseDTO.class);
+        return customerResponseDTO;
     }
 
     @Transactional
-    public void deleteCustomer(Customer customer){
-        customerRepository.delete(customer);
+    public void deleteCustomer(Long id){
+        customerRepository.deleteById(id);
     }
 }
 

@@ -159,7 +159,7 @@ class ECommerceApplicationTests {
         Categories parentCategory = categoriesRepository.findByCategoryName("books");
         Categories childCategory = new Categories();
         childCategory.setCategoryName("neo-classic books");
-        childCategory.setParentCategory(parentCategory);
+                childCategory.setParentCategory(parentCategory);
         categoriesRepository.save(childCategory);
     }
 
@@ -340,6 +340,12 @@ class ECommerceApplicationTests {
         Customer customer=customerRepository.findByActivationToken("f3ba76cd-0464-427d-9ffe-3de9330dda57");
         System.out.println(customer.getEmail());
         System.out.println(customer.getFirstName());
+    }
+
+    @Test
+    public void getUser(){
+        User user=userRepository.findByResetToken("30b893e7-7169-455a-b214-f4d62b8527d2");
+        System.out.println(user.getFirstName());
     }
 
     @Transactional

@@ -1,6 +1,7 @@
 package com.example.ecommerce.controller;
 
 
+import com.example.ecommerce.dto.SellerRegisterDTO;
 import com.example.ecommerce.entity.Customer;
 import com.example.ecommerce.entity.Seller;
 import com.example.ecommerce.exception.ConfirmationTokenExpiredException;
@@ -30,23 +31,27 @@ public class RegistrationController {
 
 
     @PostMapping(path = "/register/seller")
-    public ResponseEntity<String> registerSeller(@Valid @RequestBody Seller seller){
-        String inputEmail=seller.getEmail();
-        if(registrationService.checkDuplicateEmail(inputEmail)){
-            throw new EmailAlreadyExistsException(inputEmail+" already exist try new one");
-        }
-
-        Seller registeredSeller=registrationService.registerSeller(seller);
-        String toemail=registeredSeller.getEmail();
-        // sending email for confirmation
-        emailService.emailToSeller(toemail);
-
-        // for sending created status
-        URI location= UriComponentsBuilder.fromPath("http://localhost:8080/seller")
-                .path("/{username}")
-                .buildAndExpand(registeredSeller.getUsername())
-                   .toUri();
-        return new ResponseEntity("Customer Account Registered",HttpStatus.CREATED);
+    public ResponseEntity<String> registerSeller(@Valid @RequestBody SellerRegisterDTO sellerRegisterDTO){
+       if(registrationService.registerSeller(sellerRegisterDTO)){
+           return new ResponseEntity<>("seller has been registered check mail",HttpStatus.CREATED);
+       }
+       return  new ResponseEntity<>("seller has not been registered",HttpStatus.BAD_REQUEST);
+//        String inputEmail=seller.getEmail();
+//        if(registrationService.checkDuplicateEmail(inputEmail)){
+//            throw new EmailAlreadyExistsException(inputEmail+" already exist try new one");
+//        }
+//
+//        Seller registeredSeller=registrationService.registerSeller(seller);
+//        String toemail=registeredSeller.getEmail();
+//        // sending email for confirmation
+//        emailService.emailToSeller(toemail);
+//
+//        // for sending created status
+//        URI location= UriComponentsBuilder.fromPath("http://localhost:8080/seller")
+//                .path("/{username}")
+//                .buildAndExpand(registeredSeller.getUsername())
+//                   .toUri();
+//        return new ResponseEntity("Customer Account Registered",HttpStatus.CREATED);
     }
 
     /////////////////////////////////////////////////////////////////////////////////

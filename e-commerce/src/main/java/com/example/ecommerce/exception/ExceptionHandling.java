@@ -63,7 +63,7 @@ public class ExceptionHandling extends ResponseEntityExceptionHandler {
     @Override
     protected ResponseEntity<Object> handleHttpRequestMethodNotSupported(
             HttpRequestMethodNotSupportedException ex, HttpHeaders headers, HttpStatus status, WebRequest request) {
-        ApiError apiError = new ApiError(new Date(), "Method Type Not supported",
+        ApiError apiError = new ApiError(new Date(), ex.getMessage(),
                 request.getDescription(false));
         return new ResponseEntity(apiError, HttpStatus.METHOD_NOT_ALLOWED);
 

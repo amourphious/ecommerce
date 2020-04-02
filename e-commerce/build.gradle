@@ -26,6 +26,8 @@ dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-security'
 	implementation 'org.springframework.boot:spring-boot-starter-web'
 	implementation 'org.springframework.security.oauth.boot:spring-security-oauth2-autoconfigure:2.2.5.RELEASE'
+	implementation 'org.modelmapper:modelmapper:2.3.6' //model-mapper
+	implementation 'org.projectlombok:lombok' // lombok for @getter and @setter
 	implementation 'org.springframework.boot:spring-boot-starter-mail'
 	developmentOnly 'org.springframework.boot:spring-boot-devtools'
 	compile group: 'com.vladmihalcea', name: 'hibernate-types-52', version: '1.0.0'

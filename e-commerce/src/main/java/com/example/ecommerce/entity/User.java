@@ -24,20 +24,19 @@ public abstract class User {
     @SequenceGenerator(name = "identity_generator",sequenceName = "identity_table",allocationSize = 1)
     private Long userId;
 
-    @NotNull(message="username is required and should be unique")
+
     @Column(unique = true)
     private String username;
 
-    @NotNull(message = "password is mandatory ")
-    @Pattern(regexp="((?=.*\\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[@#$%]).{8,64})",message="Password must be 8 characters long and should contain uppercase,lowercase,digit,and special character")
+
     private String password;
 
-    @NotNull(message = "email is required and should be unique")
+
     @Column(unique = true)
     @Email(message = "enter a valid email")
     private String email;
 
-    @NotNull(message = "first name is required")
+
     @Column(name = "first_name")
     private String firstName;
 
@@ -50,16 +49,16 @@ public abstract class User {
     @Column(name = "password_reset_token")
     private String resetToken;
 
-    @JsonIgnore
+
     @Column(name = "token_expiry_date")
     private Date expiryDate;
 
     @Column(name = "is_deleted")
-    private boolean isDeleted;
+    private boolean isDeleted=false;
 
 
     @Column(name = "is_active")
-    private boolean isActive;
+    private boolean isActive=false;
 
 
     @ManyToMany(cascade = CascadeType.ALL,fetch = FetchType.EAGER)
