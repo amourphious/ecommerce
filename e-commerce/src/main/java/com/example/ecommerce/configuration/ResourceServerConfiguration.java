@@ -65,7 +65,7 @@ public class ResourceServerConfiguration extends ResourceServerConfigurerAdapter
                 .antMatchers("/customer/delete/{username}").permitAll()
                 .antMatchers("/customer/{username}").permitAll()
                 .antMatchers("/activate/customer/{token}").permitAll()
-                .antMatchers("/customer/{email}/resendActivationLink/").permitAll()
+                .antMatchers("/customer/resendActivationLink/{email}").permitAll()
 
                 .antMatchers("/admin-panel/customer-list").permitAll()
                 .antMatchers("/admin-panel/seller-list").permitAll()

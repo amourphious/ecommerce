@@ -8,6 +8,7 @@ import com.example.ecommerce.exception.NotFoundException;
 import com.example.ecommerce.repository.CustomerRepository;
 import com.example.ecommerce.repository.SellerRepository;
 import com.example.ecommerce.repository.UserRepository;
+import org.aspectj.weaver.ast.Not;
 import org.modelmapper.ModelMapper;
 import org.modelmapper.TypeToken;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -58,27 +59,38 @@ public class AdminService {
         return sellerResponseDtos;
     }
 
-    // check customer
-    public Customer checkCustomer(Long id){
-        Customer customer=customerRepository.findById(id).get();
-        if(customer==null){
-            return null;
-        }
-        return customer;
-    }
 
     //activate customer
-    public Customer activateCustomer(Customer customer){
-            customer.setActive(true);
-            customerRepository.save(customer);
-            return customer;
+    public boolean activateCustomer(Long id){
+        Customer customer=customerRepository.findById(id).get();
+        if(customer==null){
+            throw new NotFoundException("customer with id->"+id+"not found");
+        }
+
+        if(customer.isActive()){
+            return false;
+        }
+        customer.setActive(true);
+        customerRepository.save(customer);
+        String toEmail=customer.getEmail();
+        emailService.statusMail(toEmail,"account has been activated");
+            return true;
     }
 
     //deactivate customer
-    public Customer deactivateCustomer(Customer customer){
-        customer.setActive(false);
-        customerRepository.save(customer);
-        return customer;
+    public boolean deactivateCustomer(Long id){
+        Customer customer=customerRepository.findById(id).get();
+        if(customer==null){
+            throw new NotFoundException("custome with->"+id+"not found");
+        }
+        if(customer.isActive()){
+            customer.setActive(false);
+            customerRepository.save(customer);
+            String toEmail=customer.getEmail();
+            emailService.statusMail(toEmail,"account has been deactivated");
+            return true;
+        }
+        return false;
     }
 
 
@@ -92,16 +104,34 @@ public class AdminService {
     }
 
     //activate customer
-    public Seller activateSeller(Seller seller){
+    public boolean activateSeller(Long id){
+        Seller seller=sellerRepository.findById(id).get();
+        if(seller==null){
+            throw new NotFoundException("seller with "+id+"not found");
+        }
+        if(seller.isActive()){
+            return false;
+        }
         seller.setActive(true);
         sellerRepository.save(seller);
-        return seller;
+        String toEmail=seller.getEmail();
+        emailService.statusMail(toEmail,"seller account has been activated");
+        return true;
     }
 
     //deactivate customer
-    public Seller deactivateSeller(Seller seller){
-        seller.setActive(false);
-        sellerRepository.save(seller);
-        return seller;
+    public boolean deactivateSeller(Long id){
+        Seller seller=sellerRepository.findById(id).get();
+        if(seller==null){
+            throw new NotFoundException("seller with "+id+" not found");
+        }
+        if(seller.isActive()){
+            seller.setActive(false);
+            sellerRepository.save(seller);
+            String toEmail=seller.getEmail();
+            emailService.statusMail(toEmail,"seller has been deactivated check mail");
+            return true;
+        }
+        return false;
     }
 }

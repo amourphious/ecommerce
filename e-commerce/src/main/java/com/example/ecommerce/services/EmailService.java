@@ -6,6 +6,8 @@ import org.springframework.mail.javamail.JavaMailSenderImpl;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
+import java.net.URI;
+
 @Service
 public class EmailService {
 
@@ -24,10 +26,9 @@ public class EmailService {
     }
 
     @Async
-    public void emailToCustomer(String toEmail, String activationToken, String path){
+    public void emailToCustomer(String toEmail, String activationToken, URI location){
         simpleMailMessage.setTo(toEmail);
-        simpleMailMessage.setText("go to the link-->" + path+"\n"+
-                " or use the activation token->"+
+        simpleMailMessage.setText(location +"\n"+ " or use the activation token->"+
                 activationToken);
         javaMailSender.send(simpleMailMessage);
     }

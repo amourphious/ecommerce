@@ -7,7 +7,7 @@ select * from cart;
 select * from categories;
 select * from customer;
 select * from identity_table;
-select * from invoice;identity_table
+select * from invoice;
 select * from order_product;
 select * from order_status;
 select * from product;

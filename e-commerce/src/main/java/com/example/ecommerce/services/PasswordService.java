@@ -5,14 +5,11 @@ import com.example.ecommerce.entity.User;
 import com.example.ecommerce.exception.ConfirmationTokenExpiredException;
 import com.example.ecommerce.exception.NotFoundException;
 import com.example.ecommerce.repository.UserRepository;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import javax.persistence.Column;
 import java.util.Calendar;
 import java.util.UUID;
 

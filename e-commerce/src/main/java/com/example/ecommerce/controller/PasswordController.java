@@ -15,7 +15,7 @@ public class PasswordController {
     PasswordService passwordService;
 
     @PostMapping(path = "/generate-password")
-    public ResponseEntity<String> genratePassword(@RequestParam String email){
+    public ResponseEntity<String> generatePassword(@RequestParam String email){
         if(passwordService.generatePassword(email)){
             return new ResponseEntity("email has been sent to reset the password", HttpStatus.OK);
         }

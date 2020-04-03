@@ -1,14 +1,11 @@
 package com.example.ecommerce.entity;
 
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 
 import javax.persistence.*;
 import javax.validation.constraints.Email;
-import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Pattern;
 import java.sql.Timestamp;
 import java.util.*;
 
@@ -177,7 +174,7 @@ public abstract class User {
         return expiryDate;
     }
 
-    public void setExpiryDate(int expiryTimeInMinutes)
+    public void setExpiryDate(Integer expiryTimeInMinutes)
     {
         Calendar cal = Calendar.getInstance();
         cal.setTime(new Timestamp(cal.getTime().getTime()));

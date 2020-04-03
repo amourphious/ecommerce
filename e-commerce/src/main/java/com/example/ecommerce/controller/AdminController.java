@@ -44,71 +44,34 @@ public class AdminController {
 
     @PutMapping(path = "/admin-panel/activate/customer")
     public ResponseEntity<String> activateCustomer(@RequestParam Long id){
-        Customer customer=adminService.checkCustomer(id);
-        if(customer==null){
-            throw new NotFoundException("customer with "+id+" not found");
+        if(adminService.activateCustomer(id)){
+            return new ResponseEntity<String>("Customer has been activated check mail",HttpStatus.OK);
         }
-        else if(customer.isActive()){
-            return new ResponseEntity<>("the customer is already active", HttpStatus.OK);
-        }
-        else{
-            Customer activeCustomer=adminService.activateCustomer(customer);
-            String toEmail=activeCustomer.getEmail();
-            emailService.statusMail(toEmail,activeCustomer.getFirstName()+"is activated");
-
-            return new ResponseEntity<>("Account activated",HttpStatus.OK);
-        }
+        return new ResponseEntity<String>("Customer is already active",HttpStatus.OK);
     }
 
     @PutMapping(path = "/admin-panel/deactivate/customer")
     public ResponseEntity<String> deactivateCustomer(@RequestParam Long id){
-        Customer customer=adminService.checkCustomer(id);
-        if(customer==null){
-            throw new NotFoundException("customer with "+id+" not found");
+        if (adminService.deactivateCustomer(id)){
+            return new ResponseEntity<String>("customer has been deactivated check mail",HttpStatus.OK);
         }
-        else if(!customer.isActive()){
-            return new ResponseEntity<>("the customer is already deactivated", HttpStatus.OK);
-        }
-        else{
-            Customer deactiveCustomer=adminService.deactivateCustomer(customer);
-            String toEmail=deactiveCustomer.getEmail();
-            emailService.statusMail(toEmail,customer.getFirstName()+" is deactivated");
-
-            return new ResponseEntity<>("Account deactivated",HttpStatus.OK);
-        }
+        return new ResponseEntity<String>("customer is already deactive",HttpStatus.OK);
     }
 
     @PutMapping(path = "/admin-panel/activate/seller")
     public ResponseEntity<String> activateSeller(@RequestParam Long id){
-        Seller seller=adminService.checkSeller(id);
-        if(seller==null){
-            throw new NotFoundException("seller with "+id+ "not found");
+        if(adminService.activateSeller(id)){
+            return new ResponseEntity<String>("Seller has been activated check mail",HttpStatus.OK);
         }
-        else if(seller.isActive()){
-            return new ResponseEntity<>("the seller is already active",HttpStatus.OK);
-        }
-        else{
-            Seller activatedSeller=adminService.activateSeller(seller);
-            String toEmail=activatedSeller.getEmail();
-            emailService.statusMail(toEmail,"seller acount has been activated");
-            return new ResponseEntity<>("Account Activated",HttpStatus.OK);
-        }
+        return new ResponseEntity<String>("Seller is already active",HttpStatus.OK);
     }
 
     @PutMapping(path = "/admin-panel/deactivate/seller")
     public ResponseEntity<String> deactivateSeller(@RequestParam Long id){
-        Seller seller=adminService.checkSeller(id);
-        if(seller==null){
-            throw new NotFoundException("seller with "+id+ "not found");
+        if(adminService.deactivateSeller(id)){
+            return new ResponseEntity<>("Seller has been deactivated check mail",HttpStatus.OK);
         }
-        else if(!seller.isActive()){
-            return new ResponseEntity<>("the seller is already deactivated",HttpStatus.OK);
-        }
-        else{
-            Seller deactivatedSeller =adminService.deactivateSeller(seller);
-            String toEmail= deactivatedSeller.getEmail();
-            emailService.statusMail(toEmail,"seller account has been deactivated");
-            return new ResponseEntity<>("Account Deactivated",HttpStatus.OK);
-        }
+        return new ResponseEntity<>("Seller is already deactivated check mail",HttpStatus.OK);
     }
+
 }

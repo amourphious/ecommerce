@@ -344,8 +344,13 @@ class ECommerceApplicationTests {
 
     @Test
     public void getUser(){
-        User user=userRepository.findByResetToken("30b893e7-7169-455a-b214-f4d62b8527d2");
-        System.out.println(user.getFirstName());
+//        User user=userRepository.findByResetToken("30b893e7-7169-455a-b214-f4d62b8527d2");
+//        System.out.println(user.getFirstName());
+        System.out.println("hello");
+        Customer customer=customerRepository.findByEmail("batman@gmail.com");
+        Customer customer1=customerRepository.fetchByEmail("batman@gmail.com");
+        System.out.println("hello world");
+
     }
 
     @Transactional
