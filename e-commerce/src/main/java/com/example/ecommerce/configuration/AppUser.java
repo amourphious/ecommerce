@@ -1,23 +1,23 @@
 package com.example.ecommerce.configuration;
 
 import org.springframework.security.core.GrantedAuthority;
+
 import org.springframework.security.core.userdetails.UserDetails;
 
-import java.util.ArrayList;
+import lombok.AllArgsConstructor;
+
 import java.util.Collection;
 import java.util.List;
 
+@AllArgsConstructor
 public class AppUser implements UserDetails {
-
-    private String username;
-    private String password;
-    List<GrantedAuthority> grantAuthorities;
-
-    public AppUser(String username, String password, List<GrantedAuthority> grantAuthorities) {
-        this.username = username;
-        this.password = password;
-        this.grantAuthorities = grantAuthorities;
-    }
+	private final static Integer MAX_LOGIN_ATTEMPT = 3;
+	
+    private final String username;
+    private final String password;
+    private final Integer loginAttempt;
+    private final Long credsInvalidAfterMillis;
+    private final List<GrantedAuthority> grantAuthorities;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities(){
@@ -44,16 +44,16 @@ public class AppUser implements UserDetails {
 
     @Override
     public boolean isAccountNonLocked() {
-        return true;
+        return loginAttempt < MAX_LOGIN_ATTEMPT;
     }
 
     @Override
     public boolean isCredentialsNonExpired() {
-        return true;
+        return credsInvalidAfterMillis == null || System.currentTimeMillis() < credsInvalidAfterMillis;
     }
 
     @Override
     public boolean isEnabled() {
-        return true;
+        return loginAttempt < MAX_LOGIN_ATTEMPT;
     }
 }

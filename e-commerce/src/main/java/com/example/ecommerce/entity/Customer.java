@@ -14,7 +14,7 @@ import java.util.*;
 @Entity
 @Table(name = "customer")
 @PrimaryKeyJoinColumn(name = "customer_id",referencedColumnName ="user_id" )
-public class Customer extends User{
+public class Customer extends User {
 
     @Column(name = "contact_number")
     private String contactNumber;

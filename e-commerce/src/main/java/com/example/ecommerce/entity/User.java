@@ -56,6 +56,9 @@ public abstract class User {
 
     @Column(name = "is_active")
     private boolean isActive=false;
+    
+    @Column(name = "login_attempt")
+    private int loginAttempt;
 
 
     @ManyToMany(cascade = CascadeType.ALL,fetch = FetchType.EAGER)
@@ -188,6 +191,14 @@ public abstract class User {
 
     public void setResetToken(String resetToken) {
         this.resetToken = resetToken;
+    }
+    
+    public int getLoginAttempt() {
+    	return loginAttempt;
+    }
+    
+    public void setLoginAttempt(int loginAttempt) {
+    	this.loginAttempt = loginAttempt;
     }
 
     @Override
